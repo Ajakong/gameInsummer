@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 public class PlayerMove : MonoBehaviour
 {
     
+
     float speed;
+
+    public int DDOLFlag; 
 
     public bool encountFlag;
     int encountCharge;
@@ -16,23 +19,36 @@ public class PlayerMove : MonoBehaviour
     public string emptyObj;
     public string emptyObj2;
 
+    Vector3 enPos = new Vector3();
+
     // Start is called before the first frame update
     void Start()
     {
+        DDOLFlag = 0;
         DontDestroyOnLoad(this.gameObject);
+        enPos = Vector3.zero;
         
         speed = 0.005f;
         encountFlag = false;
         encountCharge=0;
         areaNum = 1;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        Debug.Log(encountCharge);
         //ˆÚ“®
         Vector3 position = transform.position;
-
+        
+        if (encountCharge == 0)
+        {
+            
+             position=enPos;
+        }
+        transform.position = enPos;
         if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.RightArrow))
         {
             speed = 0.0025f;
@@ -82,14 +98,19 @@ public class PlayerMove : MonoBehaviour
 
         if (encountCharge > 50)
         {
-            encountCharge = 0;
+            
 
+            var encount = Random.Range(0, 2);
 
-            if (areaNum == 1)
+            if (encount == 1)
             {
-                var encount = Random.Range(0, 2);
-
-                if (encount == 1) SceneManager.LoadScene("battle" + "Scene");
+                encountCharge = 0;
+                if (areaNum == 1)
+                {
+                    enPos = transform.position;
+                    Debug.Log(enPos);
+                    SceneManager.LoadScene("battle" + "Scene");
+                }
             }
         }
 
